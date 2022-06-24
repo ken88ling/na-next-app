@@ -26,9 +26,6 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Run Tests Locally
-        run: echo "Run local test
-
       - name: Deploy to Production
         uses: amondnet/vercel-action@v20
         id: deploy-vercel-production
