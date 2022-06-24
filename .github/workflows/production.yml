@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: test scripting shell
-        run: "Echo Hello World"
+        run: echo "Hello World"
 #  build:
 #    runs-on: ubuntu-latest
 #    steps:
