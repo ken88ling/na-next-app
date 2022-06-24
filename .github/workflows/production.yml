@@ -1,7 +1,12 @@
 name: Deploy To Vercel
 on:
+  release:
+    types:
+      - published
   push:
     branches: [main]
+  workflow_dispatch:
+
 jobs:
   vercel:
     runs-on: ubuntu-latest
@@ -20,11 +25,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-
-      - name: Build
-        run: |
-          yarn install --frozen-lockfile
-          yarn bundle
 
       - name: Run Tests Locally
         run: echo "Run local test
