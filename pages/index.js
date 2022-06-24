@@ -13,7 +13,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to David Ho Website with Next.js!
+          Welcome to David Ho Website with Next.js, ah yes!
         </h1>
 
         <p className={styles.description}>
