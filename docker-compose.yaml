@@ -1,0 +1,7 @@
+version: "3.8"
+services: #Defines all the different containers we will create.
+  na-next-app: #Name of Nextjs application.
+    build: .
+    image: david8087/na-next-app:latest
+    ports: # Map the container’s ports to the host machine.
+      - "3001:3001"

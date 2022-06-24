@@ -1,0 +1,66 @@
+name: staging_deployment_ec2_server
+on:
+  pull_request:
+    branches: [staging]
+  push:
+    branches: [staging]
+
+env:
+  DOCKER_IMAGE: na-next-app
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/na-next-app:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy in remote company server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_EC2_PRIVATE_KEY }}
+          SERVER_HOST : ${{ secrets.SSH_EC2_SERVER_HOST }}
+          DEPLOY_ENV: staging
+          APP_PORT: 3001
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private_key && chmod 400 private_key
+          scp -o StrictHostKeyChecking=no -i private_key ./docker-compose.yaml ./env.staging ubuntu@$SERVER_HOST:/home/ubuntu
+          ssh -o StrictHostKeyChecking=no -i private_key ubuntu@$SERVER_HOST "
+              docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} &&
+              docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/${{ DOCKER_IMAGE }}:latest &&
+              docker-compose down --rmi local &&
+              docker-compose up -d"
