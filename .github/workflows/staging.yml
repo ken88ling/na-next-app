@@ -4,7 +4,6 @@ on:
     branches: [staging]
   push:
     branches: [staging]
-
 env:
   DOCKER_IMAGE: na-next-app
 
