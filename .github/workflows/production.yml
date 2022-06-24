@@ -24,10 +24,10 @@ jobs:
       - name: Build
         run: |
           yarn install --frozen-lockfile
-          npm run bundle
+          yarn bundle
 
       - name: Run Tests Locally
-        run: npm run test
+        run: echo "Run local test
 
       - name: Deploy to Production
         uses: amondnet/vercel-action@v20
