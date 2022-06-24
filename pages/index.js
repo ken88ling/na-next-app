@@ -2,6 +2,8 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
+console.log('what is env', process.env.NEXT_PUBLIC_WHAT_ENV)
+
 export default function Home() {
   return (
     <div className={styles.container}>
@@ -13,7 +15,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to David Ho Website with Next.js, ah yes!
+          DH Website at {process.env.NEXT_PUBLIC_WHAT_ENV} environment!
         </h1>
 
         <p className={styles.description}>
