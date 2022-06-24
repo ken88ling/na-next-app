@@ -1,7 +1,5 @@
 name: staging_deployment_ec2_server
 on:
-  pull_request:
-    branches: [staging]
   push:
     branches: [staging]
 env:
