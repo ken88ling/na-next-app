@@ -12,8 +12,8 @@ COPY ./ .
 # install dependencies
 RUN yarn install
 
-# start app
-RUN yarn build
+# Build Staging
+RUN yarn build:staging
 
 EXPOSE 3000
 
