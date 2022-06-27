@@ -15,7 +15,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          DH Website at {process.env.NEXT_PUBLIC_WHAT_ENV} environment!
+          DH and KEN LING Website at {process.env.NEXT_PUBLIC_WHAT_ENV} environment!
         </h1>
 
         <p className={styles.description}>
